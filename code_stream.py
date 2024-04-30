@@ -6,6 +6,8 @@ import rasterio
 import numpy as np
 from matplotlib import colors
 
+#dem_path = "./data/wadi_84.tif"
+
 # Define the custom HTML and CSS for the fixed sticky header
 header = st.container()
 header.title("Welcome to the Flow Visualizer")
@@ -40,8 +42,16 @@ with st.expander("Threshold Functionality Explained:"):
     st.write("""
     The accumulation threshold sets the minimum amount of upstream water accumulation required for a channel to be visualized as part of the stream network. Adjusting this threshold allows users to filter out smaller stream channels and focus on more significant water flow paths, or vice versa. This feature is particularly useful for understanding the impact of varying hydrological conditions and can help in planning flood control measures, water resource management, or archaeological site protection.
     """)
-
-
+def setup_dem_selector():
+# Dropdown menu for DEM file selection
+    dem_files = {
+        "Wadi Musa": "./data/wadi_84.tif",
+        "Al_nayra": "./data/al_nayraDEM_WGS84.tif",
+        "Silaysil": "./data/silaysilDEM_WGS84.tif"
+    }
+    selected_name = st.selectbox('Select a DEM file:', options=list(dem_files.keys()))
+    return dem_files[selected_name]
+    
 def process_dem_and_extract_stream_network(dem_path, acc_threshold):
     grid = Grid.from_raster(dem_path)
     dem = grid.read_raster(dem_path)
@@ -86,12 +96,12 @@ def plot_dem_and_acc(dem, acc, grid):
     plt.tight_layout()
     return fig
 
-def main():
+def main(dem_path):
     #st.title("Welcome to the Flow Network Visualizer for Wadi, Petra, Jordan")
 
 
     # Display static plots outside the button control
-    dem_path = "/home/pnsinha/wadiDEM/wadiwgs_wgs84.tif"
+    #dem_path = "/home/pnsinha/wadiDEM/wadiwgs_wgs84.tif"
     dem, acc, branches, grid = process_dem_and_extract_stream_network(dem_path, 1000)  # Example threshold
     fig_static = plot_dem_and_acc(dem, acc, grid)
 
@@ -174,7 +184,8 @@ def plot_stream_network(acc, branches, grid, acc_threshold):
 
 
 if __name__ == "__main__":
-    main()
+    dem_path = setup_dem_selector()
+    main(dem_path)
 
 st.sidebar.image("https://gis.rcc.uchicago.edu/wp-content/uploads/2024/02/LOGO_GIS_New_1.png", use_column_width=True)
 
@@ -199,8 +210,7 @@ st.sidebar.info(
     """
 )
 
-#dem_path = "/home/pnsinha/wadiDEM/wadiwgs_wgs84.tif"
-dem_path = "./data/wadi_84.tif"
+
 dem, acc, branches, grid = process_dem_and_extract_stream_network(dem_path, 1000)  # Example threshold
 fig_static = plot_dem_and_acc(dem, acc, grid)
 st.pyplot(fig_static)
