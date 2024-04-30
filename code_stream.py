@@ -199,7 +199,8 @@ st.sidebar.info(
     """
 )
 
-dem_path = "/home/pnsinha/wadiDEM/wadiwgs_wgs84.tif"
+#dem_path = "/home/pnsinha/wadiDEM/wadiwgs_wgs84.tif"
+dem_path = "./data/wadi_84.tif"
 dem, acc, branches, grid = process_dem_and_extract_stream_network(dem_path, 1000)  # Example threshold
 fig_static = plot_dem_and_acc(dem, acc, grid)
 st.pyplot(fig_static)
