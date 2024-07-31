@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 name = "flow-visualizer"
 version = "0.1.0"
 description = "A Streamlit application for hydrological analysis and visualization"
-authors = ["pnsinha@uchicago.edu"]
+authors = ["John Smith <john@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
